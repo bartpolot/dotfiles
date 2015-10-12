@@ -1,0 +1,313 @@
+#
+# Git prompt, based on git status.
+# Execute git status and collect 
+#
+# rationale: git status is cheap.
+# ~0.04s on a RPi, 0.002s on a laptop for an empty repo
+# ~0.08s on a laptop for a 1M LoC, 10k files, 40k commit repo
+#
+setopt PROMPT_SUBST
+
+limegreen=${limegreen:-46}
+green=${green:-40}
+darkgreen=${darkgreen:-28}
+darkestgreen=${darkestgreen:-22}
+
+gray0=${gray0:-232}
+gray3=${gray3:-236}
+white=${white:-253}
+
+yellow=${yellow:-226}
+orange=${orange:-214}
+darkorange=${darkorange:-166}
+red=${red:-196}
+darkred=${darkred:-124}
+
+USER_F=${USER_F:-$gray0}
+USER_K=${USER_K:-$limegreen}
+
+HOST_F=${HOST_F:-$green}
+HOST_K=${HOST_K:-$darkestgreen}
+
+PATH_F=${PATH_F:-$green}
+PATH_K=${PATH_K:-$gray3}
+
+ALERT_F=${ALERT_F:-$white}
+ALERT_K=${ALERT_K:-red}
+
+JOBS_F=${JOBS_F:-$white}
+JOBS_K=${JOBS_K:-blue}
+
+GIT_CLEAN_F=${GIT_CLEAN_F:-$gray0}
+GIT_CLEAN_K=${GIT_CLEAN_K:-$limegreen}
+
+GIT_DIRTY_F=${GIT_DIRTY_F:-$gray0}
+GIT_DIRTY_K=058
+GIT_DIRTY_K=${GIT_DIRTY_K:-$darkorange}
+
+GIT_UNSYNC_F=${GIT_UNSYNC_F:-$gray0}
+GIT_UNSYNC_K=${GIT_UNSYNC_K:-$darkgreen}
+
+END_F=${END_F:-"default"}
+END_K=${END_K:-"default"}
+
+STAGED_F=${STAGED_F:-$limegreen}
+UNSTAGED_F=${UNSTAGED_F:-$red}
+UNTRACKED_F=${UNTRACKED_F:-$orange}
+AHEAD_F=${AHEAD_F:-$limegreen}
+BEHIND_F=${BEHIND_F:-$yellow}
+BEHIND_F=$yellow
+
+STAGED=${STAGED:-S}
+UNSTAGED=${UNSTAGED:-U}
+UNTRACKED=${UNTRACKED:-?}
+
+
+################################################################
+
+over_ssh() {
+    if [ -n "${SSH_CONNECTION}" ]; then
+	return 0
+    else
+	return 1
+    fi
+}
+
+################################################################
+
+# arrow
+function __arrow()
+{
+    if [ $# -lt 2 ]; then
+	echo usage: $0 COLOR_LEFT COLOR_RIGHT
+	return
+    fi
+    local F=$1
+    local K=$2
+    __a="%F{$F}%K{$K}%f%k"
+}
+function _arrow()
+{
+    if [ $# -lt 2 ]; then
+	echo usage: $0 PRE POST
+	return
+    fi
+    eval PRE=\$${1}_K
+    eval POST=\$${2}_K
+    __arrow $PRE $POST
+}
+
+
+# color
+function __color()
+{
+    if [ $# -lt 3 ]; then
+	echo usage: $0 FOREGROUND BACKGROUND TEXT
+	return
+    fi
+    F=$1
+    K=$2
+    shift 2
+    __c="%F{$F}%K{$K}$@%k%f"
+}
+function _color()
+{
+    if [ $# -lt 1 ]; then
+	echo usage: $0 FORMAT
+	return
+    fi
+    FRMT=$1
+    shift
+    eval F=\$${FRMT}_F
+    eval K=\$${FRMT}_K
+
+    _c="%F{$F}%K{$K}"
+}
+
+function add_segment()
+{
+    unset __a
+    if [ $# -lt 2 ]; then
+	echo usage: $0 FORMAT string
+	return
+    fi
+    FRMT=$1
+    shift
+    eval F=\$${FRMT}_F
+    eval K=\$${FRMT}_K
+
+    if [ -n "$__LAST_K" ]; then
+	__arrow $__LAST_K $K
+    fi
+    __color $F $K "$@"
+
+    retval="$__a$__c"
+    __LAST_K=$K
+}
+
+################################################################
+
+__git_status=""
+__git_ret="0"
+
+# Call git status and collect output and exit status
+# --porcelain does not provide distinction if a file is both
+# staged and unstaged (selective hunk commit, for instance)
+__git_pwd_check()
+{
+    __git_status=`git status -b 2> /dev/null`
+    __git_ret=$?
+}
+
+# Check at start in case shells starts in git repo
+#__git_pwd_check
+
+# Check every time we change directory
+chpwd() {
+    __git_pwd_check
+}
+
+precmd() {
+
+    # Unless we are in a git repo, don't bother
+    if [ "$__git_ret" = "0" ]; then
+
+	# Collect status again
+	__git_pwd_check
+
+	if grep -q "Untracked files:" <<< $__git_status; then
+	    untracked="$UNTRACKED"
+	else
+	    unset untracked
+	fi
+	if grep -q "Changes not staged for commit:" <<< $__git_status; then
+	    unstaged="$UNSTAGED"
+	else
+	    unset unstaged
+	fi
+	if grep -q "Changes to be committed:" <<< $__git_status; then
+	    staged="$STAGED"
+	else
+	    unset staged
+	fi
+	if L=`grep "Your branch is ahead of" <<< $__git_status`; then
+	    ahead=${L% *}
+	    ahead=+${ahead##* }
+	else
+	    unset ahead
+	    if L=`grep "Your branch is behind" <<< $__git_status`; then
+		behind=${L% *}
+		behind=+${behind##* }
+	    else
+		unset behind
+		if L=`grep "different commit" <<< $__git_status`; then
+		    ahead="+`sed -e 's/.*and have \([0-9]\+\).*/\1/' <<< $L`"
+		    behind="-`sed -e 's/.*and have [0-9]\+ and \([0-9]\+\).*/\1/' <<< $L`"
+		fi
+	    fi
+	fi
+
+	__git_branch=${__git_status%%$'\n'*}
+	git_branch=${__git_branch##* }
+	
+	git_dirty=${untracked+"%F{$UNTRACKED_F}$untracked"}
+	git_dirty+=${unstaged+"%F{$UNSTAGED_F}$unstaged"}
+	git_dirty+=${staged+"%F{$STAGED_F}$staged"}
+
+	git_relation=${ahead:+"%F{$AHEAD_F}$ahead"}
+	git_relation+=${behind:+"%F{$BEHIND_F}$behind"}
+
+	if [ -n "$git_dirty" ]; then
+	    git_f=$GIT_DIRTY_F
+	    git_k=$GIT_DIRTY_K
+	elif [ -n "$git_relation" ]; then
+	    git_f=$GIT_UNSYNC_F
+	    git_k=$GIT_UNSYNC_K
+	else
+	    git_f=$GIT_CLEAN_F
+	    git_k=$GIT_CLEAN_K
+	fi
+	git_color="%F{$git_f}%K{$git_k}"
+
+	__arrow $PATH_K $git_k
+	git_pre_arrow="$__a"
+
+	git_prompt="$git_pre_arrow${git_color}  %B${git_branch} "
+	git_prompt+="${git_dirty:+$git_dirty }"
+	git_prompt+="${git_relation:+$git_relation }"
+    else
+	unset git_prompt
+	git_k=$PATH_K
+    fi
+}
+
+precmd				# initialize, avoid weird startup state
+
+################################################################
+
+RESET="%f%k%b"
+PS1=''
+
+add_segment USER '%B%n%b'
+PS1+=$retval
+
+if over_ssh; then
+    add_segment HOST "%B%m%b"
+    PS1+=$retval
+fi
+
+add_segment PATH "%~"
+PS1+=$retval
+
+PS1+='${git_prompt}'
+
+### UGLY ALERT!
+### This must be rewritten at least hide it in a function
+### so all arrow variables are local
+## TODO find a better way to create all possible arrows
+## for zsh's "%(?..)" and "%(j..)" prompts
+__arrow '$git_k' $JOBS_K
+git_j=$__a
+__arrow '$git_k' $ALERT_K
+git_a=$__a
+__arrow '$git_k' $END_K
+git_e=$__a
+
+_arrow JOBS ALERT
+__aja=$__a
+_arrow JOBS END
+__aje=$__a
+_arrow ALERT END
+__aae=$__a
+
+__color $JOBS_F $JOBS_K %j
+_jobs=$__c
+__color $ALERT_F $ALERT_K %?
+_alert=$__c
+
+
+### git here can be PATH if not in git repo (git code takes care)
+# jobs: %(cond.IF_JOBS.IF_NOT_JOBS) when no alert
+# IF_JOBS     arrow_git_jobs jobs arrow_jobs_end
+# IF_NOT_JOBS arrow_git_end
+_j="%(1j.$git_j$_jobs$__aje.$git_e)"
+
+# jobs: %(cond.IF_JOBS.IF_NOT_JOBS) when alert
+# IF_JOBS     arrow_git_jobs jobs arrow_jobs_alert
+# IF_NOT_JOBS arrow_git_alert
+_j_alert="%(1j.$git_j$_jobs$__aja.$git_a)"
+
+# alert: %(cond.IF_ALERT.IF_NOT_ALERT)
+# IF_ALERT     jobs_alert alert arrow_alert_end
+# IF_NOT_ALERT jobs
+
+PS1+="%(?.$_j.$_j_alert$_alert$__aae)"
+
+
+PS1+="$RESET "
+
+RPS1="%T"
+
+unset __LAST_K
+unset __a
+unset __c

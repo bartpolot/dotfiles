@@ -1,0 +1,15 @@
+{
+    "groups": {
+	"active_window_status": {"fg": "darkgreen",    "bg": "gray0",     "attrs": []},
+	"attached_clients":     {"fg": "green",        "bg": "gray0",     "attrs": []},
+	"window_status":        {"fg": "gray70",       "bg": "gray0",     "attrs": []},
+	"activity_status":      {"fg": "limegreen",    "bg": "gray0",     "attrs": []},
+	"bell_status":          {"fg": "red",          "bg": "gray0",     "attrs": []},
+	"window":               {"fg": "mediumgreen",  "bg": "gray0",     "attrs": []},
+	"window:divider":       {"fg": "darkgreen",    "bg": "gray0",     "attrs": []},
+	"window:current":       {"fg": "gray0",        "bg": "limegreen", "attrs": []},
+	"window_name":          {"fg": "gray0",        "bg": "limegreen", "attrs": ["bold"]},
+	"session":              {"fg": "gray0",        "bg": "limegreen", "attrs": ["bold"]},
+	"session:prefix":       {"fg": "limegreen",    "bg": "gray0",     "attrs": ["bold"]}
+    }
+}

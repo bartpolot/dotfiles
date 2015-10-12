@@ -1,0 +1,165 @@
+conky.config = {
+    alignment = 'middle_right',
+    background = true,
+    border_width = 0,
+    border_inner_margin = 0,
+    color1 = 'FFFFFF',
+    color2 = 'FFFFA0',
+    color3 = 'FFFF00',
+    color4 = 'FF8000',
+    color5 = 'FF0000',
+    cpu_avg_samples = 2,
+    default_color = 'FFFFFF',
+    default_outline_color = 'FFFFFF',
+    default_shade_color = 'DEAD11',
+    double_buffer = true,
+    draw_borders = false,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    font = 'DejaVu Sans Mono:size=7',
+    gap_x = 0,
+    gap_y = 0,
+    max_port_monitor_connections = 64,
+    max_user_text = 16384,
+    maximum_width = 40,
+    minimum_height = 1080,
+    net_avg_samples = 2,
+    no_buffers = true,
+    out_to_console = no,
+    override_utf8_locale = true,
+    own_window = true,
+    own_window_argb_visual = true,
+    own_window_argb_value = 150,
+    own_window_hints = "undecorated,below,sticky,skip_taskbar,skip_pager",
+    own_window_transparent = false,
+    own_window_type =  'panel',
+    short_units = true,
+    stippled_borders = 0,
+    text_buffer_size = 512,
+    total_run_times = 0,
+    update_interval = 2,
+    update_interval_on_battery = 5,
+    uppercase = false,
+    use_spacer =  'left',
+    use_xft = true,
+    xftalpha = 1,
+}
+
+
+conky.text = [[
+${font ':size=10'}${color1}$desktop_name$font$color
+$uptime_short
+${loadavg 1}
+
+
+${font ':bold:size=10'}${color1}CPU$font$color
+$alignr${freq_g} GHz
+${font ':bold:size=8'}$alignr${cpu cpu0}%$font
+${cpugraph cpu0 13,37 000000 808080}
+$alignr${hwmon 0 temp 1}C$color
+$alignr${platform thinkpad_hwmon fan 1}rpm
+${font ':size=6'}\
+$alignr${top name 1}
+$alignr${top cpu 1}%
+$alignr${top name 2}
+$alignr${top cpu 2}%
+$alignr${top name 3}
+$alignr${top cpu 3}%
+$font
+
+
+${if_match $memperc>75}${font ':bold:size=12'}$color5${blink \#\#\#}$endif
+${color1}${font ':bold:size=10'}RAM$color$font
+${if_match $memperc>40}$color1$endif\
+${if_match $memperc>50}$color2$endif\
+${if_match $memperc>60}$color3$endif\
+${if_match $memperc>70}$color4$endif\
+${if_match $memperc>80}$color5$endif\
+${font ':bold:size=8'}$alignr$mem
+${font ':size=6'}$color\
+$alignr${top_mem name 1}
+$alignr${top_mem mem_res 1}
+$alignr${top_mem name 2}
+$alignr${top_mem mem_res 2}
+$alignr${top_mem name 3}
+$alignr${top_mem mem_res 3}
+$font
+
+
+${font ':bold:size=10'}${color1}I/O$font$color
+$alignr${diskio}
+${diskiograph 13,37 000000 808080 5000}
+$alignr${diskio sda5}
+$alignr${fs_free /}
+${fs_bar 5,37 /}
+${fs_bar 5,37 /home}
+$alignr${fs_free /home}
+$alignr${diskio sda6}
+
+
+
+${font ':bold:size=10'}${color1}WiFi$font$color
+${if_match "${wireless_essid intel0}" != "off/any"}\
+$alignr${wireless_essid intel0} ${addr intel0}
+ $alignr${wireless_bitrate intel0}%
+$alignr${wireless_link_qual intel0}%
+${downspeedgraph intel0 13,37 000000 808080 2000} 
+D${alignr}${downspeed intel0}
+U${alignr}${upspeed intel0}
+${upspeedgraph intel0 13,37 000000 808080 1020} \
+$else\
+$alignr OFF
+
+
+
+
+
+
+
+
+$endif
+
+
+
+${font ':bold:size=8'}${color1}MUC$font$color
+$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM temperature} C
+$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM pressure}mB
+$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM cloud_cover}
+$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM weather}
+$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM humidity}%
+$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM wind_speed}km/h
+${font ':bold:size=8'}${color1}MAD$font$color
+$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ LEMD temperature} C
+${font ':bold:size=8'}${color1}WRO$font$color
+$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EPWR temperature} C
+
+
+
+${execpi 60 conkyf}
+
+
+${font ':bold:size=10'}${color1}Bat$font$color
+$alignr${battery_time BAT0}%
+$alignr${battery_percent BAT0}%
+${battery_bar BAT0 5,37}
+$color1${exec bat}$color
+${battery_bar BAT1 5,37}
+$alignr${battery_percent BAT1}%
+$alignr${battery_time BAT1}%
+${acpiacadapter}
+
+
+
+${font ':bold:size=10'}${color1}Pkg
+$font$color$alignr${execi 21600 pacman_conky} upd
+
+
+${font ':bold:size=10'}${color1}RMF${font ':size=6'}$color
+${if_existing /tmp/rmf/artist}\
+$alignr${tail /tmp/rmf/artist 1 1}
+$alignr${tail /tmp/rmf/song 1 1}\
+$else \
+Stopped
+$endif
+]]
