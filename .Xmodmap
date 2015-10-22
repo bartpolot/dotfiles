@@ -1,5 +1,5 @@
-# Melt of Polish, Spanish and German letters/symbols on US layout
-# allows to type ¡¿ ąę€łżźśćńßäöüáéíóúñç ?! ¬¬ without switching layouts
+! Melt of Polish, Spanish and German letters/symbols on US layout
+! allows to type ¡¿ ąę€łżźśćńßäöüáéíóúñç ?! ¬¬ without switching layouts
 keycode  10 = 1 exclam exclamdown bar
 keycode  15 = 6 asciicircum notsign dead_circumflex
 keycode  25 = w W eogonek Eogonek
@@ -14,7 +14,7 @@ keycode  57 = n N ntilde Ntilde
 keycode  61 = slash question questiondown question
 keycode 108 = Mode_switch NoSymbol Mode_switch
 
-# Capslock is also control (WHO USES CAPSLOCK, ANYWAY??)
+! Capslock is also control (WHO USES CAPSLOCK, ANYWAY??)
 keycode  66 = Control_L
 clear Lock
 add Control = Control_L
