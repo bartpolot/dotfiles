@@ -9,3 +9,5 @@ source $HOME/.localrc
 
 # Use powerline-like, verbose git-enabled prompt
 . ~/.zshrc.prompt
+
+unsetopt share_history
