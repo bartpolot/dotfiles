@@ -1,11 +1,11 @@
 # Source Prezto.
-source $HOME/.zshrc.prezto
-
-alias rm='nocorrect rm'
-unalias top
+[[ -f $HOME/.zshrc.prezto ]] && \
+    source $HOME/.zshrc.prezto && \
+    alias rm='nocorrect rm' && \
+    unalias top
 
 # Customize to your needs...
-source $HOME/.localrc
+[[ -f $HOME/.localrc ]] && source $HOME/.localrc
 
 # Activate powerline (slow!)
 # . /usr/share/zsh/site-contrib/powerline.zsh

@@ -1,4 +1,4 @@
-source $HOME/.localrc
+[[ -f $HOME/.localrc ]] && source $HOME/.localrc
 
 # Check for an interactive session
 [ -z "$PS1" ] && return
@@ -31,7 +31,7 @@ alias less='less -RS'
 # return
 
 
-PS1_PRE="[\[$bldred\]\u\[$txtwht\]@\[$bldgrn\]\h\[$bldred\] \w\[$txtrst\]]"
+PS1_PRE="[\[$bldblu\]\u\[$txtwht\]@\[$bldgrn\]\h\[$bldred\] \w\[$txtrst\]]"
 PS1_POST="\$ "
 PS1="$PS1_PRE $PS1_POST"
 #PS1='[\u@\h \W]\$ '
@@ -64,10 +64,11 @@ man() {
 #complete -cf sudo
 #complete -cf man
 
-# Use bash-completion, if available
+# Use bash-completion and command-not-found hints, if available
 [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
-    . /usr/share/bash-completion/bash_completion
+    source /usr/share/bash-completion/bash_completion
+[[ $PS1 && -f /usr/share/doc/pkgfile/command-not-found.bash ]] && \
+    source /usr/share/doc/pkgfile/command-not-found.bash
 
 shopt -s checkwinsize
 
-source /usr/share/doc/pkgfile/command-not-found.bash
