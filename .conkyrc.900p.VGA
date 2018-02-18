@@ -48,61 +48,68 @@ conky.config = {
 }
 
 conky.text = [[
-${color1}$desktop_name$color
+${font :size=6}${color1}$desktop_name$color
 $uptime_short
-${loadavg 1}
+${loadavg 1}$font
 
-
-${color1}CPU$color
-$alignr${freq_g}
-$alignr${cpu}%
-${cpugraph 0 13,29 000000 808080}
+${font :bold:size=9}${color1}CPU$font$color
+${font :size=6}$alignr${freq_g} GHz
+${font :bold:size=8}$alignr${cpu}%$font
+${cpugraph cpu0 13,29 000000 808080}
 ${if_match ${hwmon temp 1}>50}$color1$endif\
 ${if_match ${hwmon temp 1}>60}$color4${blink !}$color2$endif\
 ${if_match ${hwmon temp 1}>70}$color3$endif\
 ${if_match ${hwmon temp 1}>80}$color4$endif\
 ${if_match ${hwmon temp 1}>85}$color5$endif\
-$alignr${hwmon temp 1}C$color
-$alignr${hwmon 1 fan 1}
-$alignr${top name 1}
-$alignr${top name 2}
+${font :bold:size=7}${hwmon 2 temp 2}C
+${font :size=6}$alignr${hwmon 1 fan 1}r
+${font :size=6}\
+${top name 1}
+$alignr${top cpu 1}%
+${top name 2}
+$alignr${top cpu 2}%
+${top name 3}
+$alignr${top cpu 3}%
+$font
 
-
-
-${color1}RAM$color
+${if_match $memperc>75}${font :bold:size=10}$color5${blink \#\#\#}$endif
+${color1}${font :bold:size=9}RAM$color$font
 ${if_match $memperc>40}$color1$endif\
 ${if_match $memperc>50}$color2$endif\
-${if_match $memperc>60}$color4${blink !}$color3$endif\
+${if_match $memperc>60}$color3$endif\
 ${if_match $memperc>70}$color4$endif\
 ${if_match $memperc>80}$color5$endif\
-$alignr$mem$color
-$alignr${top_mem name 1}
-$alignr${top_mem name 2}
+${font :bold:size=7}$alignr$mem
+${font :size=6}$color\
+${top_mem name 1}
+$alignr${top_mem mem_res 1}
+${top_mem name 2}
+$alignr${top_mem mem_res 2}
+${top_mem name 3}
+$alignr${top_mem mem_res 3}$font
 
-
-
-${color1}I/O$color
+${font :bold:size=9}${color1}I/O$font$color
 $alignr${diskio}
 ${diskiograph 13,29 000000 808080 5000}
 $alignr${diskio sda2}
 $alignr${fs_free /}
 ${fs_bar 5,29 /}
+${fs_bar 5,29 /home}
+$alignr${fs_free /home}
+$alignr${diskio sda2}
 
 
-
-${color1}WiFi$color
-${if_match "${wireless_essid intel0}"!="off/any"}\
-$alignr${wireless_essid intel0} ${addr intel0}
- $alignr${wireless_bitrate intel0}%
+${font :bold:size=9}${color1}WiFi$font$color
+${if_match "${wireless_essid intel0}" != "off/any"}\
+${font Roboto Condensed:size=8}${wireless_essid intel0}$font
+$alignr${wireless_bitrate intel0}%
 $alignr${wireless_link_qual intel0}%
-${downspeedgraph intel0 13,29 000000 808080 2000} 
-$alignr${downspeed intel0}
-$alignr${upspeed intel0}
-${upspeedgraph intel0 13,29 000000 808080 1020} \
+${downspeedgraph intel0 13,29 000000 808080 2000}
+${alignr}${downspeed intel0}
+${alignr}${upspeed intel0}
+${upspeedgraph intel0 13,29 000000 808080 1020}\
 $else\
 $alignr OFF
-
-
 
 
 
@@ -112,11 +119,7 @@ $alignr OFF
 $endif
 
 
-${execpi 60 ~/local/bin/conkyf.sh}
-
-
-
-${color1}MUC$color
+${font :bold:size=9}${color1}MUC$font$color
 $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM temperature} C
 $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM pressure}mB
 $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM cloud_cover}
@@ -125,16 +128,14 @@ $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDD
 $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM wind_speed}km/h
 
 
+${font :bold:size=9}${color1}BAT$font$color
+$alignr${battery_time BAT0}%
+$alignr${battery_percent BAT0}%
+${battery_bar BAT0 5,37}
 
+${font :bold:size=9}${color1}AC$font$color
+${font :size=7}${acpiacadapter}$font
 
-${color1}Bat$color
-$alignr${smapi_bat_perc 0}%
-${smapi_bat_bar 0 5,29}
-$alignr${smapi_bat_power 0}W
-$alignr${smapi_bat_temp 0}C
-
-
-
-${color1}Pacman$color
-$alignr${execi 21600 ~/local/bin/pacman_conky.sh}
+${font :bold:size=9}${color1}Pkg$font$color
+$alignr${execi 21600 local/bin/pacman_conky.sh}
 ]]
