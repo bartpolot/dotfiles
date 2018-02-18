@@ -14,3 +14,6 @@
 . ~/.zshrc.prompt
 
 unsetopt share_history
+
+[[ $PS1 && -f /usr/share/doc/pkgfile/command-not-found.zsh ]] && \
+    source /usr/share/doc/pkgfile/command-not-found.zsh
