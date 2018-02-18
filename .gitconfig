@@ -11,15 +11,18 @@
     svn-ci = !git stash && git svn dcommit && git stash pop
 
 [push]
-	default = simple
+    default = simple
 [color]
-	ui = true
-        diff = auto
-        status = auto
-        branch = auto
+    ui = true
+    diff = auto
+    status = auto
+    branch = auto
 [core]
-        pager = less -FRSX
-	editor = emacs
+    pager = less -FRSX
+    editor = emacs
+    excludesfile = .gitignore_global
+[commit]
+    verbose = true
 
 [include]
     path = ~/.gitconfig.local
