@@ -123,16 +123,16 @@ $endif
 
 
 ${font :bold:size=8}${color1}MUC$font$color
-$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM temperature} C
-$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM pressure}mB
-$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM cloud_cover}
-$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM weather}
-$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM humidity}%
-$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EDDM wind_speed}km/h
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM temperature} C
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM pressure}mB
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM cloud_cover}
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM weather}
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM humidity}%
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM wind_speed}km/h
 ${font :bold:size=8}${color1}MAD$font$color
-$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ LEMD temperature} C
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ LEMD temperature} C
 ${font :bold:size=8}${color1}WRO$font$color
-$alignr${weather http://weather.noaa.gov/pub/data/observations/metar/stations/ EPWR temperature} C
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EPWR temperature} C
 
 
 
