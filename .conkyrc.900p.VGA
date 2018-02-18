@@ -1,0 +1,140 @@
+conky.config = {
+    alignment = 'middle_right',
+    background = true,
+    border_width = 0,
+    border_inner_margin = 0,
+    color1 = 'FFFFFF',
+    color2 = 'FFFFA0',
+    color3 = 'FFFF00',
+    color4 = 'FF8000',
+    color5 = 'FF2020',
+    color8 = 'F00000',
+    color9 = '00A000',
+    cpu_avg_samples = 2,
+    default_color = 'FFFFFF',
+    default_outline_color = 'FFFFFF',
+    default_shade_color = 'DEAD11',
+    double_buffer = true,
+    draw_borders = false,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    font = 'DejaVu Sans Mono:size=7',
+    gap_x = 0,
+    gap_y = 539,
+    max_port_monitor_connections = 64,
+    max_user_text = 16384,
+    maximum_width = 32,
+    minimum_height = 900,
+    net_avg_samples = 2,
+    no_buffers = true,
+    out_to_console = false,
+    override_utf8_locale = true,
+    own_window = true,
+    own_window_argb_visual = true,
+    own_window_argb_value = 150,
+    own_window_hints = "undecorated,below,sticky,skip_taskbar,skip_pager",
+    own_window_transparent = false,
+    own_window_type = 'panel',
+    short_units = true,
+    stippled_borders = 0,
+    text_buffer_size = 1024,
+    update_interval = 2,
+    update_interval_on_battery = 5,
+    uppercase = false,
+    use_spacer = 'left',
+    use_xft = true,
+    xftalpha = 1,
+}
+
+conky.text = [[
+${color1}$desktop_name$color
+$uptime_short
+${loadavg 1}
+
+
+${color1}CPU$color
+$alignr${freq_g}
+$alignr${cpu}%
+${cpugraph 0 13,29 000000 808080}
+${if_match ${hwmon temp 1}>50}$color1$endif\
+${if_match ${hwmon temp 1}>60}$color4${blink !}$color2$endif\
+${if_match ${hwmon temp 1}>70}$color3$endif\
+${if_match ${hwmon temp 1}>80}$color4$endif\
+${if_match ${hwmon temp 1}>85}$color5$endif\
+$alignr${hwmon temp 1}C$color
+$alignr${hwmon 1 fan 1}
+$alignr${top name 1}
+$alignr${top name 2}
+
+
+
+${color1}RAM$color
+${if_match $memperc>40}$color1$endif\
+${if_match $memperc>50}$color2$endif\
+${if_match $memperc>60}$color4${blink !}$color3$endif\
+${if_match $memperc>70}$color4$endif\
+${if_match $memperc>80}$color5$endif\
+$alignr$mem$color
+$alignr${top_mem name 1}
+$alignr${top_mem name 2}
+
+
+
+${color1}I/O$color
+$alignr${diskio}
+${diskiograph 13,29 000000 808080 5000}
+$alignr${diskio sda2}
+$alignr${fs_free /}
+${fs_bar 5,29 /}
+
+
+
+${color1}WiFi$color
+${if_match "${wireless_essid intel0}"!="off/any"}\
+$alignr${wireless_essid intel0} ${addr intel0}
+ $alignr${wireless_bitrate intel0}%
+$alignr${wireless_link_qual intel0}%
+${downspeedgraph intel0 13,29 000000 808080 2000} 
+$alignr${downspeed intel0}
+$alignr${upspeed intel0}
+${upspeedgraph intel0 13,29 000000 808080 1020} \
+$else\
+$alignr OFF
+
+
+
+
+
+
+
+
+$endif
+
+
+${execpi 60 ~/local/bin/conkyf.sh}
+
+
+
+${color1}MUC$color
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM temperature} C
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM pressure}mB
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM cloud_cover}
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM weather}
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM humidity}%
+$alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM wind_speed}km/h
+
+
+
+
+${color1}Bat$color
+$alignr${smapi_bat_perc 0}%
+${smapi_bat_bar 0 5,29}
+$alignr${smapi_bat_power 0}W
+$alignr${smapi_bat_temp 0}C
+
+
+
+${color1}Pacman$color
+$alignr${execi 21600 ~/local/bin/pacman_conky.sh}
+]]
