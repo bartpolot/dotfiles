@@ -1,6 +1,9 @@
 # Source Prezto.
 source $HOME/.zshrc.prezto
 
+alias rm='nocorrect rm'
+unalias top
+
 # Customize to your needs...
 source $HOME/.localrc
 
