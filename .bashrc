@@ -1,7 +1,7 @@
 source $HOME/.localrc
 
 # Check for an interactive session
-[ -z "$PS1" ] && echo "damn" && return
+[ -z "$PS1" ] && return
 
 export HISTCONTROL=ignoredups:ignorespace
 export HISTSIZE=100000
