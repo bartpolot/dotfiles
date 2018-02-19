@@ -10,3 +10,7 @@ for f in .??*; do
     fi
     ln -s "$pwd/$f" "$HOME/$f"
 done
+
+# git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+# ln -s /home/bart/.zprezto/runcoms/zshrc $HOME/.zshrc.prozto
+# ln -s /home/bart/.zprezto/runcoms/zpreztorc $HOME/.zpreztorc
