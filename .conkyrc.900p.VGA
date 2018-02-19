@@ -69,8 +69,8 @@ $alignr${top cpu 1}%
 ${top name 2}
 $alignr${top cpu 2}%
 ${top name 3}
-$alignr${top cpu 3}%
-$font
+$alignr${top cpu 3}%$font
+
 
 ${if_match $memperc>75}${font :bold:size=10}$color5${blink \#\#\#}$endif
 ${color1}${font :bold:size=9}RAM$color$font
@@ -88,15 +88,14 @@ $alignr${top_mem mem_res 2}
 ${top_mem name 3}
 $alignr${top_mem mem_res 3}$font
 
+
 ${font :bold:size=9}${color1}I/O$font$color
 $alignr${diskio}
 ${diskiograph 13,29 000000 808080 5000}
-$alignr${diskio sda2}
+$alignr${diskio sda1}
 $alignr${fs_free /}
 ${fs_bar 5,29 /}
-${fs_bar 5,29 /home}
-$alignr${fs_free /home}
-$alignr${diskio sda2}
+
 
 
 ${font :bold:size=9}${color1}WiFi$font$color
