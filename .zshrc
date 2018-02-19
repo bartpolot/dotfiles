@@ -1,8 +1,8 @@
 # Source Prezto.
 [[ -f $HOME/.zshrc.prezto ]] && \
     source $HOME/.zshrc.prezto && \
-    alias rm='nocorrect rm' && \
-    unalias top
+    alias rm='nocorrect rm'
+
 
 # Customize to your needs...
 [[ -f $HOME/.localrc ]] && source $HOME/.localrc
