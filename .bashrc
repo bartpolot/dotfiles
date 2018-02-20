@@ -5,6 +5,7 @@
 
 export HISTCONTROL=ignoredups:ignorespace
 export HISTSIZE=100000
+export HISTTIMEFORMAT="%F %T "
 shopt -s histappend
 
 #########
