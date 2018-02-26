@@ -99,14 +99,14 @@ ${fs_bar 5,29 /}
 
 
 ${font :bold:size=9}${color1}WiFi$font$color
-${if_match "${wireless_essid intel0}" != "off/any"}\
-${font Roboto Condensed:size=8}${wireless_essid intel0}$font
-$alignr${wireless_bitrate intel0}%
-$alignr${wireless_link_qual intel0}%
-${downspeedgraph intel0 13,29 000000 808080 2000}
-${alignr}${downspeed intel0}
-${alignr}${upspeed intel0}
-${upspeedgraph intel0 13,29 000000 808080 1020}\
+${if_match "${wireless_essid wifi0}" != "off/any"}\
+${font Roboto Condensed:size=8}${wireless_essid wifi0}$font
+$alignr${wireless_bitrate wifi0}%
+$alignr${wireless_link_qual wifi0}%
+${downspeedgraph wifi0 13,29 000000 808080 2000}
+${alignr}${downspeed wifi0}
+${alignr}${upspeed wifi0}
+${upspeedgraph wifi0 13,29 000000 808080 1020}\
 $else\
 $alignr OFF
 
@@ -118,7 +118,7 @@ $alignr OFF
 $endif
 
 
-${font :bold:size=9}${color1}MUC$font$color
+${font :bold:size=9}${color1}MUC$color${font :size=6}
 $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM temperature} C
 $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM pressure}mB
 $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDDM cloud_cover}
@@ -128,8 +128,8 @@ $alignr${weather http://tgftp.nws.noaa.gov/data/observations/metar/stations/ EDD
 
 
 ${font :bold:size=9}${color1}BAT$font$color
-$alignr${battery_time BAT0}%
-$alignr${battery_percent BAT0}%
+${font :size=6}$alignr${battery_time BAT0}
+${font :bold:size=7}$alignr${battery_percent BAT0}%
 ${battery_bar BAT0 5,37}
 
 ${font :bold:size=9}${color1}AC$font$color
