@@ -13,6 +13,6 @@
 (show-paren-mode 1)
 
 ;; Save sessions
-(desktop-save-mode 1)
+;(desktop-save-mode 1)
 
 (setq-default indicate-empty-lines t)
